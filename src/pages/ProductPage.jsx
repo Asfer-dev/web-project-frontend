@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
+import { useAuth } from "../contexts/authContext";
+import FeaturedSection from "../components/FeaturedSection";
 
 const ProductPage = () => {
   const [products, setProducts] = useState([]);
-
   useEffect(() => {
     const fetchProducts = async () => {
       const response = await fetch("http://localhost:3000/api/products");
@@ -14,10 +15,11 @@ const ProductPage = () => {
   }, []);
 
   return (
-    <main>
-      <section>
-        <h1 className="text-3xl font-bold">Products</h1>
-        <div className="grid sm:grid-cols-3 md:grid-cols-4 items-center justify-center">
+    <main className="py-16 mx-auto">
+      <FeaturedSection />
+      <section className="max-w-[1300px] mx-auto p-4 mt-8" id="products">
+        <h1 className="text-3xl mb-8">Products</h1>
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 items-center justify-center gap-4">
           {products.map((product) => (
             <ProductCard product={product} />
           ))}

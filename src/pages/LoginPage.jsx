@@ -1,13 +1,18 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/authContext";
+import PrimaryButton from "../components/buttons/PrimaryButton";
 
 const LoginPage = () => {
+  const { auth, login } = useAuth();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
   const [error, setError] = useState("");
+
+  const navigate = useNavigate();
 
   // Single onChange handler for all input fields
   const handleChange = (e) => {
@@ -18,7 +23,13 @@ const LoginPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    if (auth.user) {
+      navigate("/");
+    }
+  }, [auth]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Simple validation for the form
@@ -30,33 +41,61 @@ const LoginPage = () => {
     // Clear the error if form is valid
     setError("");
 
-    // Example of submitting form (you can replace this with your API call)
-    console.log("Email:", formData.email);
-    console.log("Password:", formData.password);
+    try {
+      const response = await fetch("http://localhost:3000/api/users/login", {
+        method: "POST",
+        body: JSON.stringify(formData),
+        headers: {
+          "Content-Type": "application/json", // Specifies the request payload format
+          Accept: "application/json", // Indicates you expect a JSON response
+        },
+      });
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(`${data.message}`);
+      }
+      const data = await response.json();
+      login(
+        {
+          _id: data._id,
+          name: data.name,
+          email: data.email,
+          role: data.role,
+        },
+        data.token
+      );
 
-    // Reset form data after successful submit (optional)
-    setFormData({
-      email: "",
-      password: "",
-    });
+      // Reset form data after successful submit (optional)
+      setFormData({
+        email: "",
+        password: "",
+      });
+
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+      setError(
+        error.message ? error.message : "An error occurred. Please try again."
+      );
+    }
   };
 
   return (
-    <div>
-      <form class="max-w-sm mx-auto" onSubmit={handleSubmit}>
+    <main className="p-4 py-16 min-h-screen">
+      <form className="max-w-sm mx-auto pt-12" onSubmit={handleSubmit}>
         <h1 className="text-3xl mb-2">Login</h1>
         <p className="mb-6 text-zinc-500">Login to your Account</p>
-        <div class="mb-5">
+        <div className="mb-5">
           <label
-            for="email"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            htmlFor="email"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
             Your email
           </label>
           <input
             type="email"
             id="email"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="example@gmail.com"
             required
             name="email"
@@ -64,39 +103,35 @@ const LoginPage = () => {
             onChange={(e) => handleChange(e)}
           />
         </div>
-        <div class="mb-5">
+        <div className="mb-5">
           <label
-            for="password"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            htmlFor="password"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
             Your password
           </label>
           <input
             type="password"
             id="password"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             required
             name="password"
             value={formData.password}
             onChange={handleChange}
           />
         </div>
-        <div class="flex items-start mb-5">
-          <p class="text-sm font-medium text-gray-900 dark:text-gray-300">
+        <p className="text-red-500">{error}</p>
+        <div className="flex items-start mb-5">
+          <p className="text-sm font-medium text-gray-900 dark:text-gray-300">
             Don't have an account?{" "}
             <Link className="underline" to={"/register"}>
               Sign up
             </Link>
           </p>
         </div>
-        <button
-          type="submit"
-          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-        >
-          Login
-        </button>
+        <PrimaryButton>Login</PrimaryButton>
       </form>
-    </div>
+    </main>
   );
 };
 

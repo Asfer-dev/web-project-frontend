@@ -1,16 +1,23 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const ProductCard = ({ product }) => {
   return (
-    <div className="flex flex-col gap-2 p-2 border border-zinc-200 w-fit">
-      <div className="h-[250px] w-fit mx-auto bg-red-300">
-        <img
-          className="h-full object-cover"
-          src="https://media.istockphoto.com/id/1225779005/vector/glasses-icon.jpg?s=612x612&w=0&k=20&c=C_Kh4DMhrBM1zqtkOjgYcnDtQNw8hZEJQhdYkb9Srtg="
-          alt={product.name}
-        />
-      </div>
-      <p className="text-lg">{product.name}</p>
+    <div className="flex flex-col items-center gap-1 p-2 border-zinc-200 w-fit">
+      <Link to={`/products/${product._id}`}>
+        <div className="w-[220px] mx-auto">
+          <img
+            className="w-full aspect-square object-cover block rounded-lg hover:scale-105 transition duration-300 cursor-pointer"
+            src={`http://localhost:3000/${product.images[0]}`}
+            alt={product.name}
+          />
+        </div>
+      </Link>
+      <Link to={`/products/${product._id}`}>
+        <p className="product-title text-xl mt-1 transition duration-200 relative overflow-hidden">
+          {product.name}
+        </p>
+      </Link>
       <p className="font-medium">Rs. {product.price}</p>
     </div>
   );

@@ -1,5 +1,7 @@
+import AdminPanel from "../components/AdminPanel";
+
 const AdminPage = () => {
-  return <div>AdminPage</div>;
+  return <AdminPanel>Dashboard</AdminPanel>;
 };
 
 export default AdminPage;
