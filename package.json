@@ -10,11 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "clsx": "^2.1.1",
     "flowbite": "^2.5.2",
     "lucide-react": "^0.469.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^7.1.0"
+    "react-router-dom": "^7.1.0",
+    "tailwind-merge": "^2.6.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",

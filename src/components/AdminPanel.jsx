@@ -23,7 +23,7 @@ const AdminPanel = ({ children }) => {
     <main className="p-4 pt-20 max-w-[1300px] mx-auto min-h-screen">
       <h1 className="text-3xl mb-8">Admin Panel</h1>
       <div className="flex gap-4 border-y border-zinc-200">
-        <aside className="border-r border-zinc-200 p-4 min-w-[150px]">
+        <aside className="border-r border-zinc-200 p-4 min-w-[200px] min-h-[calc(100vh-6rem)]">
           <nav>
             <ul className="flex flex-col gap-2 text-lg">
               <li>

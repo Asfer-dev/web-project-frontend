@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import AdminPanel from "./AdminPanel";
 import { useAuth } from "../contexts/authContext";
 import { useNavigate, useParams } from "react-router-dom";
+import { Loader2 } from "lucide-react";
 
 const EditProductForm = () => {
   const { auth } = useAuth();
@@ -20,6 +21,7 @@ const EditProductForm = () => {
   const [imagePreviews, setImagePreviews] = useState([]);
 
   const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -57,6 +59,7 @@ const EditProductForm = () => {
           images: data.images,
           imageFiles: [],
         });
+        console.log(data);
         setImagePreviews((prev) => {
           return data.images.map(
             (imagePath) => `http://localhost:3000${imagePath}`
@@ -72,6 +75,26 @@ const EditProductForm = () => {
     fetchCategories();
     fetchProductData();
   }, [id]);
+
+  useEffect(() => {
+    if (!formData.category) {
+      setFormData((prev) => ({ ...prev, properties: [] }));
+    } else {
+      setFormData((prev) => {
+        const category = categories.find(
+          (cat) => cat._id === formData.category
+        );
+        let newProperties = formData.properties;
+        if (category) {
+          newProperties = category.properties.map((prop) => ({
+            name: prop.name,
+            value: newProperties.find((p) => p.name === prop.name)?.value || "",
+          }));
+        }
+        return { ...prev, properties: newProperties };
+      });
+    }
+  }, [formData.category]);
 
   const getCategory = () => {
     return categories.find((cat) => cat._id === formData.category);
@@ -93,6 +116,13 @@ const EditProductForm = () => {
     );
     if (existingProperty) {
       existingProperty.value = newProperty.value;
+      setFormData((prev) => {
+        const p = prev.properties.find(
+          (prop) => prop.name === newProperty.name
+        );
+        p.value = newProperty.value;
+        return { ...prev };
+      });
     } else {
       setFormData((prev) => ({
         ...prev,
@@ -115,6 +145,7 @@ const EditProductForm = () => {
   };
 
   const handleSubmit = async (e) => {
+    setSubmitting(true);
     e.preventDefault();
 
     // Simple validation for the form
@@ -170,12 +201,14 @@ const EditProductForm = () => {
       setError(
         error.message ? error.message : "An error occurred. Please try again."
       );
+    } finally {
+      setSubmitting(false);
     }
   };
   return (
     <AdminPanel>
       <form onSubmit={handleSubmit}>
-        <h1 className="text-3xl mb-2">Add a new Product</h1>
+        <h1 className="text-3xl mb-2">Edit Product</h1>
         <div className="mb-5">
           <label
             htmlFor="name"
@@ -217,11 +250,13 @@ const EditProductForm = () => {
           </select>
         </div>
         <div className="mb-5">
-          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-            Properties
-          </label>
-          {getCategory() != null &&
-            getCategory().properties.map((property) => (
+          {/* {formData.properties.length > 0 && (
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              Properties
+            </label>
+          )} */}
+          {formData.properties &&
+            formData.properties.map((property) => (
               <div className="pl-8">
                 <label
                   htmlFor={property.name}
@@ -233,17 +268,25 @@ const EditProductForm = () => {
                   type="text"
                   id={property.name}
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Product name"
+                  placeholder="value"
                   required
                   name={property.name}
                   onChange={handlePropertyChange}
+                  value={property.value}
                   list={`${property.name}-values`}
                 />
-                <datalist id={`${property.name}-values`}>
-                  {property.values.map((value) => (
-                    <option value={value} />
-                  ))}
-                </datalist>
+                {/* <datalist id={`${property.name}-values`}>
+                {property.values.map((value) => (
+                  <option value={value} />
+                ))}
+              </datalist> */}
+                {/* <p>
+                  {
+                    formData.properties.find(
+                      (prop) => prop.name === property.name
+                    ).value
+                  }
+                </p> */}
               </div>
             ))}
         </div>
@@ -283,7 +326,7 @@ const EditProductForm = () => {
         </div>
         <div className="mb-5">
           <label
-            htmlFor="name"
+            htmlFor="price"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
             Product Price
@@ -303,7 +346,8 @@ const EditProductForm = () => {
           type="submit"
           className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
-          Submit
+          {submitting && <Loader2 className="animate-spin mr-2 w-4 h-4" />}
+          Save
         </button>
         <p className="text-red-500">{error}</p>
       </form>
