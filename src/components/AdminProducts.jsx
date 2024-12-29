@@ -64,8 +64,7 @@ const AdminProducts = () => {
         {/* PRODUCTS TABLE */}
         {loading ? (
           <div className="my-8 flex flex-col gap-4 items-center">
-            <Loader2 className="animate-spin w-4 h-4" />
-            <p className="text-neutral-700 font-medium">
+            <p className="text-neutral-700 font-medium flex gap-2 items-center">
               <Loader2 className="animate-spin w-6 h-6" /> Loading Products
             </p>
           </div>
