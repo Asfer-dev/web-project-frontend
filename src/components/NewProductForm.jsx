@@ -3,6 +3,7 @@ import AdminPanel from "./AdminPanel";
 import { useAuth } from "../contexts/authContext";
 import { useNavigate } from "react-router-dom";
 import PrimaryButton from "./buttons/PrimaryButton";
+import { Loader2, X } from "lucide-react";
 
 const NewProductForm = () => {
   const { auth } = useAuth();
@@ -21,6 +22,8 @@ const NewProductForm = () => {
 
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+
+  const [isChecked, setIsChecked] = useState(false);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -96,6 +99,13 @@ const NewProductForm = () => {
 
     // Clear the error if form is valid
     setError("");
+
+    if (isChecked) {
+      setFormData((prev) => ({
+        ...prev,
+        description: getCategory().description || "",
+      }));
+    }
 
     const formPayload = new FormData();
 
@@ -231,9 +241,34 @@ const NewProductForm = () => {
             onChange={handleImageChange}
             multiple
           ></input>
-          <div className="flex flex-wrap gap-2 my-2">
+          <div className="flex flex-wrap gap-2 my-2 py-2">
             {imagePreviews.map((url) => (
-              <img className="h-[200px]" src={url} alt="" />
+              <div className="relative border border-zinc-300 rounded-lg">
+                <img className="h-[200px] rounded-lg" src={url} alt="" />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const imgPath = url.split("localhost:3000")[1];
+                    const imageIndex = formData.images.indexOf(imgPath);
+                    if (imageIndex !== -1) {
+                      const images = formData.images;
+                      images.splice(imageIndex, 1);
+                      setFormData((prev) => ({ ...prev, images: images }));
+                    } else {
+                      setFormData((prev) => ({
+                        ...prev,
+                        imageFiles: prev.imageFiles.filter(
+                          (file) => URL.createObjectURL(file) !== imgPath
+                        ),
+                      }));
+                    }
+                    setImagePreviews((prev) => prev.filter((u) => u !== url));
+                  }}
+                  className="w-5 h-5 absolute -top-2 text-sm -right-2 z-10 bg-red-500 rounded-full text-white flex justify-center items-center"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </div>
             ))}
           </div>
         </div>
@@ -244,7 +279,24 @@ const NewProductForm = () => {
           >
             Product description
           </label>
+          <div class="flex items-center mb-4">
+            <input
+              checked={isChecked}
+              onChange={(e) => setIsChecked(e.target.checked)}
+              id="default-checkbox"
+              type="checkbox"
+              value=""
+              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+            />
+            <label
+              for="default-checkbox"
+              className="ms-2 text-sm text-gray-900 dark:text-gray-300"
+            >
+              Use category description
+            </label>
+          </div>
           <textarea
+            disabled={isChecked}
             id="description"
             rows="4"
             class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -271,7 +323,7 @@ const NewProductForm = () => {
             onChange={handleChange}
           />
         </div>
-        <PrimaryButton>
+        <PrimaryButton className={"flex gap-2 items-center"}>
           {submitting && <Loader2 className="animate-spin mr-2 w-4 h-4" />}
           Save
         </PrimaryButton>

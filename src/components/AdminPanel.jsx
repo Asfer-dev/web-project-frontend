@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/authContext";
+import { ChartColumnBig, ListChecks, Package, Shapes } from "lucide-react";
 
 const AdminPanel = ({ children }) => {
   const { auth } = useAuth();
@@ -16,11 +17,12 @@ const AdminPanel = ({ children }) => {
   function isActiveLink(linkPath) {
     return location.pathname.startsWith(linkPath);
   }
-  const linkStyles = "block px-2 py-1 rounded-md hover:bg-zinc-100";
+  const linkStyles =
+    "flex gap-2 items-center px-2 py-1 rounded-md hover:bg-zinc-100";
   const activeLinkStyles = linkStyles + " bg-zinc-200/80";
 
   return (
-    <main className="p-4 pt-20 max-w-[1300px] mx-auto min-h-screen">
+    <main className="pt-20 container-default">
       <h1 className="text-3xl mb-8">Admin Panel</h1>
       <div className="flex gap-4 border-y border-zinc-200">
         <aside className="border-r border-zinc-200 p-4 min-w-[200px] min-h-[calc(100vh-6rem)]">
@@ -35,6 +37,7 @@ const AdminPanel = ({ children }) => {
                   }
                   to={"/admin"}
                 >
+                  <ChartColumnBig className="h-5 w-5" />
                   Dashboard
                 </Link>
               </li>
@@ -47,6 +50,7 @@ const AdminPanel = ({ children }) => {
                   }
                   to={"/admin/products"}
                 >
+                  <Package className="h-5 w-5" />
                   Products
                 </Link>
               </li>
@@ -59,6 +63,7 @@ const AdminPanel = ({ children }) => {
                   }
                   to={"/admin/categories"}
                 >
+                  <Shapes className="h-5 w-5" />
                   Categories
                 </Link>
               </li>
@@ -71,6 +76,7 @@ const AdminPanel = ({ children }) => {
                   }
                   to={"/admin/orders"}
                 >
+                  <ListChecks className="h-5 w-5" />
                   Orders
                 </Link>
               </li>

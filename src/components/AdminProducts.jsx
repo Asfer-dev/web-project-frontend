@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AdminPanel from "./AdminPanel";
 import { Link } from "react-router-dom";
-import { Loader2 } from "lucide-react";
+import { Loader2, Trash2 } from "lucide-react";
 import ProductEditButton from "./buttons/ProductEditButton";
 import PrimaryButton from "./buttons/PrimaryButton";
 import PopupModal from "./PopupModal";
@@ -72,39 +72,46 @@ const AdminProducts = () => {
         ) : (
           <>
             <div className="max-h-screen overflow-y-auto p-1">
-              <table className="basic mt-2 ">
-                <thead>
-                  <tr>
-                    <td>Product Name</td>
-                    <td>Category</td>
-                    {/* <td>Actions</td> */}
-                  </tr>
-                </thead>
-                <tbody>
-                  {products.map((product) => (
-                    <tr key={product._id}>
-                      <td>{product.name}</td>
-                      <td>{product.category}</td>
-                      <td className="flex flex-col sm:flex-row gap-2 justify-end">
-                        <div>
-                          <ProductEditButton productId={product._id} />
-                        </div>
-                        <div>
-                          <PrimaryButton
-                            className={"px-3 py-2 bg-red-600 hover:bg-red-700"}
-                            handleClick={() => {
-                              setProductToDeleteId(product._id);
-                              setPopupVisible((prev) => !prev);
-                            }}
-                          >
-                            Delete
-                          </PrimaryButton>
-                        </div>
-                      </td>
+              {products.length === 0 ? (
+                <div className="text-center my-8">No products added</div>
+              ) : (
+                <table className="basic mt-2 ">
+                  <thead>
+                    <tr>
+                      <td>Product Name</td>
+                      <td>Category</td>
+                      {/* <td>Actions</td> */}
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {products.map((product) => (
+                      <tr key={product._id}>
+                        <td>{product.name}</td>
+                        <td>{product.category}</td>
+                        <td className="flex flex-col sm:flex-row gap-2 justify-end">
+                          <div>
+                            <ProductEditButton productId={product._id} />
+                          </div>
+                          <div>
+                            <PrimaryButton
+                              className={
+                                "px-3 py-2 flex gap-2 items-center bg-red-600 hover:bg-red-700"
+                              }
+                              handleClick={() => {
+                                setProductToDeleteId(product._id);
+                                setPopupVisible((prev) => !prev);
+                              }}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                              Delete
+                            </PrimaryButton>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
           </>
         )}

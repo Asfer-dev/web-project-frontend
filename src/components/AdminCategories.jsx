@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import AdminPanel from "./AdminPanel";
 import { Link } from "react-router-dom";
-import { Loader2 } from "lucide-react";
+import { FilePenLine, Loader2, Trash2 } from "lucide-react";
 import ProductDeleteButton from "./buttons/ProductDeleteButton";
 import PrimaryButton from "./buttons/PrimaryButton";
 import SecondaryButton from "./buttons/SecondaryButton";
@@ -202,7 +202,9 @@ const AdminCategories = () => {
 
       {/* CATEGORY FORM */}
       <form onSubmit={handleSubmit}>
-        <h3 className="text-xl mb-2">Add a new Category</h3>
+        <h3 className="text-2xl mb-4">
+          {isEditing ? "Edit Category" : "Add a new Category"}
+        </h3>
         <div className="flex gap-4">
           <div className="mb-5 w-full">
             <label
@@ -282,6 +284,23 @@ const AdminCategories = () => {
             New property
           </SecondaryButton>
         </div>
+        <div className="mb-5">
+          <label
+            htmlFor="description"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >
+            Category description
+          </label>
+          <textarea
+            id="description"
+            rows="4"
+            className="block p-2.5 w-full whitespace-pre text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Description.."
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+          ></textarea>
+        </div>
         <PrimaryButton>
           {submitting && <Loader2 className="animate-spin w-4 h-4 mr-2" />} Save
         </PrimaryButton>
@@ -311,26 +330,32 @@ const AdminCategories = () => {
                   {categories.map((category) => (
                     <tr key={category._id}>
                       <td>{category.name}</td>
-                      <td>{category.parent}</td>
+                      <td>{category.parent?.name}</td>
                       <td className="flex flex-col sm:flex-row gap-2 justify-end">
                         <div>
                           <SecondaryButton
                             handleClick={() => {
                               enableEdit(category._id);
                             }}
-                            className={"px-3 py-2 mb-0 me-0"}
+                            className={
+                              "px-3 py-2 mb-0 me-0 flex gap-2 items-center"
+                            }
                           >
+                            <FilePenLine className="h-4 w-4" />
                             Edit
                           </SecondaryButton>
                         </div>
                         <div>
                           <PrimaryButton
-                            className={"px-3 py-2 bg-red-600 hover:bg-red-700"}
+                            className={
+                              "px-3 py-2 flex gap-2 items-center bg-red-600 hover:bg-red-700"
+                            }
                             handleClick={() => {
                               setCategoryToDeleteId(category._id);
                               setPopupVisible((prev) => !prev);
                             }}
                           >
+                            <Trash2 className="h-4 w-4" />
                             Delete
                           </PrimaryButton>
                         </div>

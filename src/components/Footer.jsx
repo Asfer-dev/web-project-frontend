@@ -1,4 +1,7 @@
+import { AtSign, MapPin, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
+import { ReactSocialMediaIcons } from "react-social-media-icons";
+import Logo from "./Logo";
 
 const Footer = () => {
   const quickLinks = [
@@ -19,19 +22,19 @@ const Footer = () => {
     <footer className="">
       <div className="border border-zinc-200 flex flex-col md:flex-row gap-4 justify-between px-4 md:px-16 py-16">
         <div className="flex flex-col items-center md:items-start">
-          {/* <Logo /> */}
+          <Logo />
           <div className="mt-12 flex flex-col gap-4">
             <p className="flex gap-1">
-              {/* <IconLocation /> */}
+              <MapPin />
               Address ABC, New York,
               <br /> Unites States
             </p>
             <p className="flex gap-1">
-              {/* <IconPhone />  */}
+              <Phone />
               Help Line & Whatsapp: <br /> +123 456 789
             </p>
             <p className="flex gap-1">
-              {/* <IconEmail />  */}
+              <AtSign />
               someaddress@gmail.com
             </p>
           </div>
@@ -56,7 +59,7 @@ const Footer = () => {
           <h3 className="font-medium text-2xl mb-6 text-center md:text-left">
             Contact Us
           </h3>
-          {/* <div className="flex gap-1 justify-center md:justify-normal">
+          <div className="flex gap-1 justify-center md:justify-normal">
             <ReactSocialMediaIcons
               borderColor="rgba(0,0,0,0)"
               icon="instagram"
@@ -89,7 +92,7 @@ const Footer = () => {
               url="#"
               size="48"
             />
-          </div> */}
+          </div>
           <div className="mt-6 text-center md:text-left">
             <div className="flex gap-1 justify-center md:justify-normal">
               <input
@@ -107,7 +110,7 @@ const Footer = () => {
       </div>
       <div className="bg-zinc-100 p-4">
         <p className="text-center">
-          © Copyright 2024 Vision Vault All rights reserved.
+          © Copyright 2024 GlassGalore All rights reserved.
         </p>
       </div>
     </footer>
