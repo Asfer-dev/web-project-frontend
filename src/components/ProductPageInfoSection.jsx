@@ -7,6 +7,7 @@ import { Heart, MoveRight, ShoppingCart } from "lucide-react";
 import PrimaryButton from "./buttons/PrimaryButton";
 
 export default function ProductPageInfoSection({ product }) {
+  console.log(product);
   const { addProductToCart } = useCart();
   const { wishlist, addProductToWishlist, removeProductFromWishlist } =
     useWishlist();
@@ -34,7 +35,11 @@ export default function ProductPageInfoSection({ product }) {
   return (
     <div className="p-4">
       <h2 className="font-medium text-4xl mb-4">{product.name}</h2>
-      <p className="mb-4 whitespace-pre">{product.description}</p>
+      <p className="mb-4 whitespace-pre-wrap">
+        {product.use_category_description
+          ? product.category?.description
+          : product.description}
+      </p>
       <p className="font-semibold text-xl mb-4">
         <span className="font-semibold">Rs. {product.price}.00</span>
       </p>

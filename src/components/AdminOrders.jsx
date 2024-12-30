@@ -3,6 +3,7 @@ import AdminPanel from "./AdminPanel";
 import { Loader2 } from "lucide-react";
 import PrimaryButton from "./buttons/PrimaryButton";
 import SecondaryButton from "./buttons/SecondaryButton";
+import { Link } from "react-router-dom";
 
 const AdminOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -64,14 +65,11 @@ const AdminOrders = () => {
                       <td>{order.line_items.length}</td>
                       <td className="flex flex-col sm:flex-row gap-2 justify-end">
                         <div>
-                          <SecondaryButton
-                            handleClick={() => {
-                              // enableEdit(order._id);
-                            }}
-                            className={"px-3 py-2 mb-0 me-0"}
-                          >
-                            Edit
-                          </SecondaryButton>
+                          <Link to={`/admin/orders/${order._id}`}>
+                            <SecondaryButton className={"px-3 py-2 mb-0 me-0"}>
+                              Manage
+                            </SecondaryButton>
+                          </Link>
                         </div>
                         <div>
                           <PrimaryButton

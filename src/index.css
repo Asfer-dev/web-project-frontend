@@ -30,6 +30,10 @@ body {
   @apply mx-auto max-w-[1200px] min-h-screen px-4;
 }
 
+.container-wide {
+  @apply mx-auto max-w-[1400px] min-h-screen px-4;
+}
+
 .product-title::before {
   content: "";
   background: #545454;

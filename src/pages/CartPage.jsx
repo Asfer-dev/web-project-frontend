@@ -6,12 +6,7 @@ import PrimaryButton from "../components/buttons/PrimaryButton";
 
 const CartPage = () => {
   const [cartProducts, setCartProducts] = useState([]);
-  const {
-    cart,
-    addProductToCart,
-    subtractProductQuantityFromCart,
-    removeProductFromCart,
-  } = useCart();
+  const { cart } = useCart();
 
   useEffect(() => {
     const fetchCartProducts = async () => {

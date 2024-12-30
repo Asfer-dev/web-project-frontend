@@ -18,6 +18,7 @@ const EditProductForm = () => {
     imageFiles: [],
     price: "",
     description: "",
+    use_category_description: false,
   });
   const [categories, setCategories] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
@@ -25,7 +26,7 @@ const EditProductForm = () => {
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  const [isChecked, setIsChecked] = useState(false);
+  // const [isChecked, setIsChecked] = useState(false);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -57,9 +58,10 @@ const EditProductForm = () => {
         setFormData({
           id: data._id,
           name: data.name,
-          category: data.category,
+          category: data.category?._id,
           properties: data.properties,
           price: data.price,
+          use_category_description: data.use_category_description,
           description: data.description,
           images: data.images,
           imageFiles: [],
@@ -163,12 +165,12 @@ const EditProductForm = () => {
     // Clear the error if form is valid
     setError("");
 
-    if (isChecked) {
-      setFormData((prev) => ({
-        ...prev,
-        description: getCategory().description || "",
-      }));
-    }
+    // if (isChecked) {
+    //   setFormData((prev) => ({
+    //     ...prev,
+    //     description: getCategory().description || "",
+    //   }));
+    // }
 
     const formPayload = new FormData();
 
@@ -317,7 +319,7 @@ const EditProductForm = () => {
           <div className="flex flex-wrap gap-3 my-2 py-2">
             {imagePreviews.map((url) => (
               <div className="relative border border-zinc-300 rounded-lg">
-                <img className="h-[200px] rounded-lg" src={url} alt="" />
+                <img className="h-[150px] rounded-lg" src={url} alt="" />
                 <button
                   type="button"
                   onClick={() => {
@@ -354,8 +356,13 @@ const EditProductForm = () => {
           </label>
           <div class="flex items-center mb-4">
             <input
-              checked={isChecked}
-              onChange={(e) => setIsChecked(e.target.checked)}
+              checked={formData.use_category_description}
+              onChange={(e) => {
+                setFormData((prev) => ({
+                  ...prev,
+                  use_category_description: e.target.checked,
+                }));
+              }}
               id="default-checkbox"
               type="checkbox"
               value=""
@@ -369,7 +376,7 @@ const EditProductForm = () => {
             </label>
           </div>
           <textarea
-            disabled={isChecked}
+            disabled={formData.use_category_description}
             id="description"
             rows="4"
             className="block p-2.5 w-full whitespace-pre text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"

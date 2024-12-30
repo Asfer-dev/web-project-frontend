@@ -18,6 +18,7 @@ import ProductPage from "./pages/ProductPage";
 import { CartProvider } from "./contexts/cartContext";
 import { WishlistProvider } from "./contexts/wishlistContext";
 import UserPage from "./pages/UserPage";
+import AdminManageOrder from "./pages/AdminManageOrder";
 
 function App() {
   return (
@@ -39,6 +40,10 @@ function App() {
                 <Route path="/admin/products" element={<AdminProducts />} />
                 <Route path="/admin/categories" element={<AdminCategories />} />
                 <Route path="/admin/orders" element={<AdminOrders />} />
+                <Route
+                  path="/admin/orders/:id"
+                  element={<AdminManageOrder />}
+                />
                 <Route
                   path="/admin/products/new-product"
                   element={<NewProductForm />}

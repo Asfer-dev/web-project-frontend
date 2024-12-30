@@ -16,6 +16,7 @@ const NewProductForm = () => {
     imageFiles: [],
     price: "",
     description: "",
+    use_category_description: false,
   });
   const [categories, setCategories] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
@@ -23,7 +24,7 @@ const NewProductForm = () => {
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  const [isChecked, setIsChecked] = useState(false);
+  // const [use_category_description, setUse_category_description] = useState(false);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -100,12 +101,12 @@ const NewProductForm = () => {
     // Clear the error if form is valid
     setError("");
 
-    if (isChecked) {
-      setFormData((prev) => ({
-        ...prev,
-        description: getCategory().description || "",
-      }));
-    }
+    // if (use_category_description) {
+    //   setFormData((prev) => ({
+    //     ...prev,
+    //     description: getCategory().description || "",
+    //   }));
+    // }
 
     const formPayload = new FormData();
 
@@ -142,6 +143,8 @@ const NewProductForm = () => {
         name: "",
         category: "",
         images: [],
+        description: "",
+        use_category_description: false,
       });
 
       navigate("/admin/products");
@@ -244,7 +247,7 @@ const NewProductForm = () => {
           <div className="flex flex-wrap gap-2 my-2 py-2">
             {imagePreviews.map((url) => (
               <div className="relative border border-zinc-300 rounded-lg">
-                <img className="h-[200px] rounded-lg" src={url} alt="" />
+                <img className="h-[150px] rounded-lg" src={url} alt="" />
                 <button
                   type="button"
                   onClick={() => {
@@ -281,8 +284,13 @@ const NewProductForm = () => {
           </label>
           <div class="flex items-center mb-4">
             <input
-              checked={isChecked}
-              onChange={(e) => setIsChecked(e.target.checked)}
+              checked={formData.use_category_description}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  use_category_description: e.target.checked,
+                }))
+              }
               id="default-checkbox"
               type="checkbox"
               value=""
@@ -296,7 +304,7 @@ const NewProductForm = () => {
             </label>
           </div>
           <textarea
-            disabled={isChecked}
+            disabled={formData.use_category_description}
             id="description"
             rows="4"
             class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"

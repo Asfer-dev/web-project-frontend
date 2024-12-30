@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PrimaryButton from "../components/buttons/PrimaryButton";
 
 const RegisterPage = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -21,7 +22,7 @@ const RegisterPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Simple validation for the form
@@ -29,19 +30,43 @@ const RegisterPage = () => {
       setError("Please enter both email and password.");
       return;
     }
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
 
     // Clear the error if form is valid
     setError("");
 
-    // Example of submitting form (you can replace this with your API call)
-    console.log("Email:", formData.email);
-    console.log("Password:", formData.password);
+    try {
+      const response = await fetch("http://localhost:3000/api/users/", {
+        method: "POST",
+        body: JSON.stringify(formData),
+        headers: {
+          "Content-Type": "application/json", // Specifies the request payload format
+          Accept: "application/json", // Indicates you expect a JSON response
+        },
+      });
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(`${data.message}`);
+      }
+      const data = await response.json();
 
-    // Reset form data after successful submit (optional)
-    setFormData({
-      email: "",
-      password: "",
-    });
+      // Reset form data after successful submit (optional)
+      setFormData({
+        name: "",
+        email: "",
+        password: "",
+      });
+
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+      setError(
+        error.message ? error.message : "An error occurred. Please try again."
+      );
+    }
   };
 
   return (
@@ -119,6 +144,7 @@ const RegisterPage = () => {
             onChange={handleChange}
           />
         </div>
+        <p className="text-red-500">{error}</p>
         <div className="flex items-start mb-5">
           <p className="text-sm font-medium text-gray-900 dark:text-gray-300">
             Already have an account?{" "}

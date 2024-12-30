@@ -9,7 +9,7 @@ export const CartProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchCart = async () => {
-      let cart;
+      let cart = [];
       if (auth.user) {
         try {
           const response = await fetch(`http://localhost:3000/api/users/cart`, {
