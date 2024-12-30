@@ -5,6 +5,7 @@ import SecondaryButton from "./buttons/SecondaryButton";
 import { useWishlist } from "../contexts/wishlistContext";
 import { Heart, MoveRight, ShoppingCart } from "lucide-react";
 import PrimaryButton from "./buttons/PrimaryButton";
+import { cn } from "../lib/utils";
 
 export default function ProductPageInfoSection({ product }) {
   console.log(product);
@@ -35,7 +36,7 @@ export default function ProductPageInfoSection({ product }) {
   return (
     <div className="p-4">
       <h2 className="font-medium text-4xl mb-4">{product.name}</h2>
-      <p className="mb-4 whitespace-pre-wrap">
+      <p className="mb-4 whitespace-pre-wrap text-justify">
         {product.use_category_description
           ? product.category?.description
           : product.description}
@@ -64,7 +65,12 @@ export default function ProductPageInfoSection({ product }) {
       </button> */}
       <div className="flex gap-2 mt-6 mb-4 w-full">
         <PrimaryButton
-          className={" flex justify-center md:w-1/2 p-3"}
+          disabled={addedToCart}
+          className={cn(
+            " flex justify-center md:w-1/2 p-3",
+            addedToCart &&
+              "bg-green-600 hover:bg-green-600 focus:ring-green-300"
+          )}
           handleClick={() => {
             addProductToCart(product._id);
             setAddedToCart(true);
@@ -73,9 +79,9 @@ export default function ProductPageInfoSection({ product }) {
             }, 3000);
           }}
         >
-          <div className={"flex gap-2 items-center text-lg"}>
+          <div className={cn("flex gap-2 items-center text-lg")}>
             <ShoppingCart className="h-6 w-6" />
-            {addedToCart ? "Added TO Cart!" : "Add to Cart"}
+            {addedToCart ? "Added to Cart!" : "Add to Cart"}
           </div>
         </PrimaryButton>
         <SecondaryButton

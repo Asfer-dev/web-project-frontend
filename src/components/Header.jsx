@@ -52,7 +52,7 @@ const Header = () => {
                   className={"flex gap-2 items-center"}
                   variant={"light"}
                 >
-                  <UserRound className="h-5 w-5" /> Account{" "}
+                  <UserRound className="h-5 w-5" /> {auth.user.name}{" "}
                   <svg
                     class="w-2.5 h-2.5 ms-3"
                     aria-hidden="true"
@@ -92,6 +92,7 @@ const Header = () => {
                         <Link
                           to="/user"
                           className="px-4 flex gap-2 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                          onClick={() => setAccountDropdownVisible(false)}
                         >
                           <button
                             className="flex gap-2"
@@ -106,6 +107,7 @@ const Header = () => {
                         <Link
                           to="user/orders"
                           className="flex gap-2 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                          onClick={() => setAccountDropdownVisible(false)}
                         >
                           <button
                             className="flex gap-2"

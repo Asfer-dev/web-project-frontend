@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../contexts/authContext";
-import { Loader2 } from "lucide-react";
+import { Check, Loader2, MoveLeft } from "lucide-react";
 import { useCart } from "../contexts/cartContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import OrderItemsCard from "../components/OrderItemsCard";
+import SecondaryButton from "../components/buttons/SecondaryButton";
 
 const CheckoutPage = () => {
   const navigate = useNavigate();
@@ -50,6 +52,11 @@ const CheckoutPage = () => {
         console.log(error);
       }
     };
+
+    if (cart.length === 0) {
+      navigate("/cart");
+    }
+
     fetchCartProducts();
   }, [cart]);
 
@@ -245,33 +252,30 @@ const CheckoutPage = () => {
               onChange={handleChange}
             />
           </div>
-          <button
-            type="submit"
-            className="text-white flex gap-2 items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            {submitting && <Loader2 className="animate-spin mr-2 w-4 h-4" />}
-            Place Order
-          </button>
+          <div className="flex gap-6 mt-8 items-center">
+            <Link to={"/cart"} className="group hover:border-b border-zinc-900">
+              <div className={"flex gap-2 items-center"}>
+                <MoveLeft /> <span className="">Back to Cart</span>
+              </div>
+            </Link>
+            <button
+              type="submit"
+              className="text-white flex gap-2 items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+              {submitting ? (
+                <Loader2 className="animate-spin w-4 h-4" />
+              ) : (
+                <Check className="" />
+              )}
+              Place Order
+            </button>
+          </div>
           <p className="text-red-500">{error}</p>
         </form>
         <div className="border-l-2 border-zinc-200 h-full w-1"></div>
         <div className="w-full ">
           <h2 className="text-2xl font-medium mb-4">Summary</h2>
-          <div className="mb-4">
-            <h3 className="text-xl font-medium text-zinc-700 mb-2">Items:</h3>
-            {cartProducts.map((product) => (
-              <div className="flex gap-2 items-center mb-2">
-                <img
-                  className="inline-block h-10 border border-zinc-200"
-                  src={`http://localhost:3000${product.images[0]}`}
-                  alt=""
-                />
-                <p>
-                  {product.quantity} X {product.name}
-                </p>
-              </div>
-            ))}
-          </div>
+          {cart.length > 0 && <OrderItemsCard productIds={cart} />}
           <div className="border-t border-gray-200 pt-4">
             <div className="flex justify-between text-sm">
               <span className="text-gray-700">Subtotal:</span>
@@ -279,7 +283,7 @@ const CheckoutPage = () => {
             </div>
             <div className="flex justify-between text-sm mt-2">
               <span className="text-gray-700">Delivery:</span>
-              <span className="text-green-500">FREE</span>
+              <span className="">FREE</span>
             </div>
             <div className="flex justify-between text-lg font-medium mt-4">
               <span className="text-gray-900">Total:</span>

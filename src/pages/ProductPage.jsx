@@ -38,7 +38,7 @@ export default function ProductPage() {
   }, []);
 
   return (
-    <main className="py-20 container-default">
+    <main className="py-20 container-wide">
       <section className="grid md:grid-cols-2 gap-12">
         <ProductPagePhotoSection product={product} />
         <ProductPageInfoSection product={product} />

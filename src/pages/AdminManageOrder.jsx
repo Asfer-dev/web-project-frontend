@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import AdminPanel from "../components/AdminPanel";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import PrimaryButton from "../components/buttons/PrimaryButton";
 import { Loader2 } from "lucide-react";
 import { useAuth } from "../contexts/authContext";
+import OrderItemsCard from "../components/OrderItemsCard";
+import { getProductIds } from "../lib/utils";
 
 const AdminManageOrder = () => {
   const { auth } = useAuth();
@@ -12,8 +14,12 @@ const AdminManageOrder = () => {
   const [order, setOrder] = useState({
     name: "",
     email: "",
+    line_items: [],
+    address: "",
+    city: "",
+    country: "",
+    postal: "",
   });
-  const [orderProducts, setOrderProducts] = useState([]);
 
   const [formData, setFormData] = useState({
     completed: false,
@@ -28,43 +34,19 @@ const AdminManageOrder = () => {
           throw new Error(`${data.message}`);
         }
         const data = await response.json();
-        console.log(data);
         setOrder(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    const fetchOrderProducts = async () => {
-      const productIds = order.line_items?.map((item) => item.productId);
-      try {
-        const response = await fetch(
-          `http://localhost:3000/api/get-cart-products`,
-          {
-            method: "POST",
-            body: JSON.stringify(productIds),
-            headers: {
-              "content-type": "application/json",
-            },
-          }
-        );
-        if (!response.ok) {
-          const data = await response.json();
-          throw new Error(`${data.message}`);
-        }
-        const data = await response.json();
-        console.log(data);
-        setOrderProducts(data);
         setFormData((prev) => ({ ...prev, completed: data.completed }));
       } catch (error) {
         console.log(error);
       }
     };
+
     fetchOrderData();
-    fetchOrderProducts();
-  }, [order.name]);
+  }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();
+
     try {
       const response = await fetch(
         "http://localhost:3000/api/orders/" + order._id,
@@ -94,37 +76,23 @@ const AdminManageOrder = () => {
 
   return (
     <AdminPanel>
-      <h2 className="text-3xl mb-4">Order ID # {order._id}</h2>
+      <h2 className="text-3xl mb-4">Order ID # {order.order_no}</h2>
       <p className="text-lg font-medium text-zinc-700 mb-4">
-        Order placed by: {order.name}
+        Order placed by: <b className="font-semibold">{order.name}</b>
       </p>
       <div className=" mb-4">
-        <h3 className="text-lg font-medium text-zinc-700">Contact and Email</h3>
+        <h3 className="text-sm font-medium text-zinc-600">Contact and Email</h3>
         <p>{order.email}</p>
       </div>
-      <h3 className="text-xl font-medium text-zinc-700 mb-4">
-        Items Information
-      </h3>
-      <div>
-        {orderProducts.length > 0 &&
-          orderProducts.map((product) => (
-            <div className="flex gap-2 items-center">
-              <img
-                className="inline-block h-10 border border-zinc-200"
-                src={`http://localhost:3000${product.images[0]}`}
-                alt=""
-              />
-              <p>
-                {
-                  order.line_items.find(
-                    (item) => item.productId === product._id
-                  )?.quantity
-                }{" "}
-                X {product.name}
-              </p>
-            </div>
-          ))}
+      <div className=" mb-4">
+        <h3 className="text-sm font-medium text-zinc-600">Address</h3>
+        <p>
+          {order.address}, {order.city}, {order.postal}, {order.country}
+        </p>
       </div>
+      {order.line_items.length > 0 && (
+        <OrderItemsCard productIds={getProductIds(order.line_items)} />
+      )}
 
       <form className="my-4" onSubmit={handleSubmit}>
         <div class="flex items-center mb-4">

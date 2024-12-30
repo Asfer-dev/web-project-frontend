@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PrimaryButton from "../components/buttons/PrimaryButton";
+import { useAuth } from "../contexts/authContext";
 
 const RegisterPage = () => {
+  const { auth } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
@@ -21,6 +23,12 @@ const RegisterPage = () => {
       [name]: value, // Dynamically update the correct field
     }));
   };
+
+  useEffect(() => {
+    if (auth.user) {
+      navigate("/");
+    }
+  }, [auth]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -36,6 +36,7 @@ const AdminCategories = () => {
           throw new Error(`${data.message}`);
         }
         const data = await response.json();
+        console.log(data);
         setCategories(data);
       } catch (error) {
         console.log(error);
@@ -294,7 +295,7 @@ const AdminCategories = () => {
           <textarea
             id="description"
             rows="4"
-            className="block p-2.5 w-full whitespace-pre text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="block p-2.5 w-full whitespace-pre-wrap text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Description.."
             name="description"
             value={formData.description}
@@ -317,52 +318,56 @@ const AdminCategories = () => {
         ) : (
           <>
             <div className="max-h-screen overflow-y-auto p-1">
-              <table className="basic mt-2 ">
-                <thead>
-                  <tr>
-                    <td>Category Name</td>
-                    <td>Parent Category</td>
-                    {/* <td>Actions</td> */}
-                  </tr>
-                </thead>
-                <tbody>
-                  {categories.map((category) => (
-                    <tr key={category._id}>
-                      <td>{category.name}</td>
-                      <td>{category.parent?.name}</td>
-                      <td className="flex flex-col sm:flex-row gap-2 justify-end">
-                        <div>
-                          <SecondaryButton
-                            handleClick={() => {
-                              enableEdit(category._id);
-                            }}
-                            className={
-                              "px-3 py-2 mb-0 me-0 flex gap-2 items-center"
-                            }
-                          >
-                            <FilePenLine className="h-4 w-4" />
-                            Edit
-                          </SecondaryButton>
-                        </div>
-                        <div>
-                          <PrimaryButton
-                            className={
-                              "px-3 py-2 flex gap-2 items-center bg-red-600 hover:bg-red-700"
-                            }
-                            handleClick={() => {
-                              setCategoryToDeleteId(category._id);
-                              setPopupVisible((prev) => !prev);
-                            }}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                            Delete
-                          </PrimaryButton>
-                        </div>
-                      </td>
+              {categories.length === 0 ? (
+                <div className="text-center my-8">No categories added</div>
+              ) : (
+                <table className="basic mt-2 ">
+                  <thead>
+                    <tr>
+                      <td>Category Name</td>
+                      <td>Parent Category</td>
+                      {/* <td>Actions</td> */}
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {categories.map((category) => (
+                      <tr key={category._id}>
+                        <td>{category.name}</td>
+                        <td>{category.parent?.name}</td>
+                        <td className="flex flex-col sm:flex-row gap-2 justify-end">
+                          <div>
+                            <SecondaryButton
+                              handleClick={() => {
+                                enableEdit(category._id);
+                              }}
+                              className={
+                                "px-3 py-2 mb-0 me-0 flex gap-2 items-center"
+                              }
+                            >
+                              <FilePenLine className="h-4 w-4" />
+                              Edit
+                            </SecondaryButton>
+                          </div>
+                          <div>
+                            <PrimaryButton
+                              className={
+                                "px-3 py-2 flex gap-2 items-center bg-red-600 hover:bg-red-700"
+                              }
+                              handleClick={() => {
+                                setCategoryToDeleteId(category._id);
+                                setPopupVisible((prev) => !prev);
+                              }}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                              Delete
+                            </PrimaryButton>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
           </>
         )}

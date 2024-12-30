@@ -4,6 +4,7 @@ import { useAuth } from "../contexts/authContext";
 import { useNavigate } from "react-router-dom";
 import PrimaryButton from "./buttons/PrimaryButton";
 import { Loader2, X } from "lucide-react";
+import ImageModal from "./ImageModal";
 
 const NewProductForm = () => {
   const { auth } = useAuth();
@@ -24,7 +25,7 @@ const NewProductForm = () => {
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  // const [use_category_description, setUse_category_description] = useState(false);
+  const [modalImageUrl, setModalImageUrl] = useState("");
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -246,8 +247,13 @@ const NewProductForm = () => {
           ></input>
           <div className="flex flex-wrap gap-2 my-2 py-2">
             {imagePreviews.map((url) => (
-              <div className="relative border border-zinc-300 rounded-lg">
-                <img className="h-[150px] rounded-lg" src={url} alt="" />
+              <div className="relative border border-zinc-300 rounded-lg hover:opacity-80 cursor-pointer">
+                <img
+                  onClick={() => setModalImageUrl(url)}
+                  className="h-[150px] rounded-lg"
+                  src={url}
+                  alt=""
+                />
                 <button
                   type="button"
                   onClick={() => {
@@ -307,7 +313,7 @@ const NewProductForm = () => {
             disabled={formData.use_category_description}
             id="description"
             rows="4"
-            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="block p-2.5 w-full whitespace-pre-wrap text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Description.."
             name="description"
             onChange={handleChange}
@@ -336,6 +342,11 @@ const NewProductForm = () => {
           Save
         </PrimaryButton>
         <p className="text-red-500">{error}</p>
+        <ImageModal
+          isVisible={modalImageUrl !== ""}
+          closeModal={() => setModalImageUrl("")}
+          imageUrl={modalImageUrl}
+        />
       </form>
     </AdminPanel>
   );

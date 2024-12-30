@@ -45,7 +45,7 @@ const ProductCard = ({ product, isCartProduct }) => {
           >
             -
           </SecondaryButton>
-          <span>{getCartProductQuantity(product._id)}</span>
+          <span>{product.quantity}</span>
           <SecondaryButton
             handleClick={() => addProductToCart(product._id)}
             className="rounded-full p-0 w-8 h-8 flex items-center justify-center bg-zinc-100 border border-zinc-300/60"

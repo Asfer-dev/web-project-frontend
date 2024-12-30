@@ -1,8 +1,15 @@
 import { cn } from "../../lib/utils";
 
-const PrimaryButton = ({ children, handleClick, className, type }) => {
+const PrimaryButton = ({
+  children,
+  handleClick,
+  className,
+  type,
+  disabled,
+}) => {
   return (
     <button
+      disabled={disabled}
       type={type}
       onClick={handleClick}
       className={cn(

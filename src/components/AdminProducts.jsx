@@ -49,7 +49,7 @@ const AdminProducts = () => {
       setProductToDeleteId("");
     } catch (error) {
       console.log(error);
-      setError(
+      alert(
         error.message ? error.message : "An error occurred. Please try again."
       );
     }
@@ -77,16 +77,27 @@ const AdminProducts = () => {
                 <table className="basic mt-2 ">
                   <thead>
                     <tr>
+                      <td>No.</td>
                       <td>Product Name</td>
                       <td>Category</td>
                       {/* <td>Actions</td> */}
                     </tr>
                   </thead>
                   <tbody>
-                    {products.map((product) => (
+                    {products.map((product, index) => (
                       <tr key={product._id}>
-                        <td>{product.name}</td>
-                        <td>{product.category}</td>
+                        <td>{index + 1}</td>
+                        <td>
+                          <div className="flex gap-2 items-center">
+                            <img
+                              className="inline-block h-10"
+                              src={`http://localhost:3000${product.images[0]}`}
+                              alt=""
+                            />
+                            <p>{product.name}</p>
+                          </div>
+                        </td>
+                        <td>{product.category?.name}</td>
                         <td className="flex flex-col sm:flex-row gap-2 justify-end">
                           <div>
                             <ProductEditButton productId={product._id} />

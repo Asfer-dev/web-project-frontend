@@ -19,11 +19,14 @@ import { CartProvider } from "./contexts/cartContext";
 import { WishlistProvider } from "./contexts/wishlistContext";
 import UserPage from "./pages/UserPage";
 import AdminManageOrder from "./pages/AdminManageOrder";
+import UserManageOrders from "./components/UserManageOrders";
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
   return (
     <>
       <Router>
+        <ScrollToTop />
         <AuthProvider>
           <CartProvider>
             <WishlistProvider>
@@ -36,6 +39,7 @@ function App() {
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/user" element={<UserPage />} />
+                <Route path="/user/orders" element={<UserManageOrders />} />
                 <Route path="/admin" element={<AdminPage />} />
                 <Route path="/admin/products" element={<AdminProducts />} />
                 <Route path="/admin/categories" element={<AdminCategories />} />

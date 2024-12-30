@@ -31,7 +31,7 @@ body {
 }
 
 .container-wide {
-  @apply mx-auto max-w-[1400px] min-h-screen px-4;
+  @apply mx-auto max-w-[1300px] min-h-screen px-4;
 }
 
 .product-title::before {

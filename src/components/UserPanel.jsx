@@ -43,7 +43,7 @@ const UserPanel = ({ children }) => {
                   to={"/user/orders"}
                 >
                   <Package className="h-5 w-5" />
-                  Orders
+                  My Orders
                 </Link>
               </li>
             </ul>

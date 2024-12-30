@@ -46,47 +46,55 @@ const AdminOrders = () => {
         ) : (
           <>
             <div className="max-h-screen overflow-y-auto p-1">
-              <table className="basic mt-2 ">
-                <thead>
-                  <tr>
-                    <td>No.</td>
-                    <td>Ordered by</td>
-                    <td>Email</td>
-                    <td>Item count</td>
-                    {/* <td>Actions</td> */}
-                  </tr>
-                </thead>
-                <tbody>
-                  {orders.map((order, index) => (
-                    <tr key={order._id}>
-                      <td>{index + 1}</td>
-                      <td>{order.name}</td>
-                      <td>{order.email}</td>
-                      <td>{order.line_items.length}</td>
-                      <td className="flex flex-col sm:flex-row gap-2 justify-end">
-                        <div>
-                          <Link to={`/admin/orders/${order._id}`}>
-                            <SecondaryButton className={"px-3 py-2 mb-0 me-0"}>
-                              Manage
-                            </SecondaryButton>
-                          </Link>
-                        </div>
-                        <div>
-                          <PrimaryButton
-                            className={"px-3 py-2 bg-red-600 hover:bg-red-700"}
-                            handleClick={() => {
-                              // setOrderToDeleteId(order._id);
-                              // setPopupVisible((prev) => !prev);
-                            }}
-                          >
-                            Delete
-                          </PrimaryButton>
-                        </div>
-                      </td>
+              {orders.length === 0 ? (
+                <div className="text-center my-8">No orders found</div>
+              ) : (
+                <table className="basic mt-2 ">
+                  <thead>
+                    <tr>
+                      <td>No.</td>
+                      <td>Ordered by</td>
+                      <td>Email</td>
+                      <td>Item count</td>
+                      {/* <td>Actions</td> */}
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {orders.map((order, index) => (
+                      <tr key={order._id}>
+                        <td>{index + 1}</td>
+                        <td>{order.name}</td>
+                        <td>{order.email}</td>
+                        <td>{order.line_items.length}</td>
+                        <td className="flex flex-col sm:flex-row gap-2 justify-end">
+                          <div>
+                            <Link to={`/admin/orders/${order._id}`}>
+                              <SecondaryButton
+                                className={"px-3 py-2 mb-0 me-0"}
+                              >
+                                Manage
+                              </SecondaryButton>
+                            </Link>
+                          </div>
+                          <div>
+                            <PrimaryButton
+                              className={
+                                "px-3 py-2 bg-red-600 hover:bg-red-700"
+                              }
+                              handleClick={() => {
+                                // setOrderToDeleteId(order._id);
+                                // setPopupVisible((prev) => !prev);
+                              }}
+                            >
+                              Delete
+                            </PrimaryButton>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
           </>
         )}
