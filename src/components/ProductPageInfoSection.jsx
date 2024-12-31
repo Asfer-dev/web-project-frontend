@@ -8,25 +8,11 @@ import PrimaryButton from "./buttons/PrimaryButton";
 import { cn } from "../lib/utils";
 
 export default function ProductPageInfoSection({ product }) {
-  console.log(product);
   const { addProductToCart, setCartBoxVisible } = useCart();
   const { wishlist, addProductToWishlist, removeProductFromWishlist } =
     useWishlist();
 
-  const [size, setSize] = useState("");
-  const [dimensions, setDimensions] = useState("");
-
-  useEffect(() => {
-    const sizeValue = product?.properties?.find(
-      (prop) => prop.name.toLowerCase() === "size"
-    )?.value;
-    setSize(sizeValue);
-
-    const frameSize = product?.properties?.find(
-      (prop) => prop.name.toLowerCase() === "dimensions"
-    )?.value;
-    setDimensions(frameSize);
-  }, [product]);
+  const [popoverVisible, setPopoverVisible] = useState(false);
 
   const [addedToCart, setAddedToCart] = useState(false);
 
@@ -63,6 +49,7 @@ export default function ProductPageInfoSection({ product }) {
       >
         {addedToCart ? "ADDED TO CART!" : "ADD TO CART"}
       </button> */}
+
       <div className="flex gap-2 mt-6 mb-4 w-full">
         <PrimaryButton
           disabled={addedToCart}
@@ -85,28 +72,38 @@ export default function ProductPageInfoSection({ product }) {
             {addedToCart ? "Added to Cart!" : "Add to Cart"}
           </div>
         </PrimaryButton>
-        <SecondaryButton
-          className={"rounded-full w-12 h-12 flex justify-center items-center"}
-          handleClick={() => {
-            if (wishlist.includes(product._id)) {
-              removeProductFromWishlist(product._id);
-            } else {
-              addProductToWishlist(product._id);
+        <div className="relative">
+          <SecondaryButton
+            handleHover={setPopoverVisible}
+            className={
+              "rounded-full w-12 h-12 flex justify-center items-center"
             }
-          }}
-        >
-          {wishlist.includes(product._id) ? (
-            <div>
-              <span className="sr-only">Remove from Wishlist</span>{" "}
-              <Heart className="w-6 h-6 text-red-500" fill="#ef4444" />
-            </div>
-          ) : (
-            <div>
-              <span className="sr-only">Add to Wishlist</span>{" "}
-              <Heart className="w-6 h-6 text-red-500" />
+            handleClick={() => {
+              if (wishlist.includes(product._id)) {
+                removeProductFromWishlist(product._id);
+              } else {
+                addProductToWishlist(product._id);
+              }
+            }}
+          >
+            {wishlist.includes(product._id) ? (
+              <div>
+                <span className="sr-only">Remove from Wishlist</span>{" "}
+                <Heart className="w-6 h-6 text-red-500" fill="#ef4444" />
+              </div>
+            ) : (
+              <div>
+                <span className="sr-only">Add to Wishlist</span>{" "}
+                <Heart className="w-6 h-6 text-red-500" />
+              </div>
+            )}
+          </SecondaryButton>
+          {popoverVisible && (
+            <div className="absolute -top-12 -right-14 text-center p-1 rounded-md w-[150px] bg-zinc-100 border">
+              Add to Wishlist
             </div>
           )}
-        </SecondaryButton>
+        </div>
       </div>
       <Link to={"/checkout"}>
         <button

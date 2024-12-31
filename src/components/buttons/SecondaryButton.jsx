@@ -1,8 +1,14 @@
 import { cn } from "../../lib/utils";
 
-const SecondaryButton = ({ children, className, handleClick }) => {
+const SecondaryButton = ({ children, className, handleClick, handleHover }) => {
   return (
     <button
+      onMouseEnter={() => {
+        handleHover(true);
+      }}
+      onMouseLeave={() => {
+        handleHover(false);
+      }}
       onClick={handleClick}
       type="button"
       className={cn(
