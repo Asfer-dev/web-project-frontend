@@ -55,17 +55,23 @@ const AdminOrders = () => {
                       <td>No.</td>
                       <td>Ordered by</td>
                       <td>Email</td>
-                      <td>Item count</td>
+                      <td>Status</td>
                       {/* <td>Actions</td> */}
                     </tr>
                   </thead>
                   <tbody>
                     {orders.map((order, index) => (
                       <tr key={order._id}>
-                        <td>{index + 1}</td>
+                        <td>{order.order_no}</td>
                         <td>{order.name}</td>
                         <td>{order.email}</td>
-                        <td>{order.line_items.length}</td>
+                        <td>
+                          {order.completed ? (
+                            <p className="text-green-500">done</p>
+                          ) : (
+                            <p className="text-yellow-500">pending</p>
+                          )}
+                        </td>
                         <td className="flex flex-col sm:flex-row gap-2 justify-end">
                           <div>
                             <Link to={`/admin/orders/${order._id}`}>

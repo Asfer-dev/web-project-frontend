@@ -12,13 +12,15 @@ import PillButton from "./buttons/PillButton";
 import { useState } from "react";
 import { cn } from "../lib/utils";
 import Logo from "./Logo";
+import CartBox from "./CartBox";
 
 const Header = () => {
   const { auth, logout } = useAuth();
-  const { cart } = useCart();
+  const { cart, cartBoxVisible, setCartBoxVisible } = useCart();
   const navigate = useNavigate();
 
   const [accountDropdownVisible, setAccountDropdownVisible] = useState(false);
+
   return (
     <div className="fixed z-[999] top-0 right-0 left-0 py-2 px-8 border-zinc-200 shadow-sm shadow-zinc-200 backdrop-blur-lg bg-white/80">
       <nav>
@@ -30,12 +32,19 @@ const Header = () => {
           </li>
           <li className="ml-auto"></li>
           <li className="flex items-center mx-2 mt-2">
-            <Link to={"/cart"} className="inline-block relative">
+            <button
+              onClick={() => setCartBoxVisible((prev) => !prev)}
+              className="inline-block relative"
+            >
               <span className="sr-only">Cart</span> <ShoppingCart />{" "}
               <span className="absolute -top-3 -right-3 w-5 h-5 rounded-full bg-black text-white text-sm flex items-center justify-center">
                 {new Set(cart).size}
               </span>
-            </Link>
+            </button>
+            <CartBox
+              cartVisible={cartBoxVisible}
+              setCartVisible={setCartBoxVisible}
+            />
           </li>
           {auth.user ? (
             <>

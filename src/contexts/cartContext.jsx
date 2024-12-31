@@ -6,6 +6,7 @@ const CartContext = createContext();
 export const CartProvider = ({ children }) => {
   const { auth } = useAuth();
   const [cart, setCart] = useState([]);
+  const [cartBoxVisible, setCartBoxVisible] = useState(false);
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -90,6 +91,8 @@ export const CartProvider = ({ children }) => {
         subtractProductQuantityFromCart,
         removeProductFromCart,
         resetCart,
+        cartBoxVisible,
+        setCartBoxVisible,
       }}
     >
       {children}

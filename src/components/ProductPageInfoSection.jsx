@@ -9,7 +9,7 @@ import { cn } from "../lib/utils";
 
 export default function ProductPageInfoSection({ product }) {
   console.log(product);
-  const { addProductToCart } = useCart();
+  const { addProductToCart, setCartBoxVisible } = useCart();
   const { wishlist, addProductToWishlist, removeProductFromWishlist } =
     useWishlist();
 
@@ -77,6 +77,7 @@ export default function ProductPageInfoSection({ product }) {
             setTimeout(() => {
               setAddedToCart(false);
             }, 3000);
+            setCartBoxVisible(true);
           }}
         >
           <div className={cn("flex gap-2 items-center text-lg")}>

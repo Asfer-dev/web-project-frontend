@@ -41,7 +41,7 @@ const UserManageOrders = () => {
           </Link>
         </div>
       ) : (
-        <div>
+        <div className="flex flex-wrap gap-4">
           {userOrders.map((order) => (
             <OrderCard order={order} />
           ))}
